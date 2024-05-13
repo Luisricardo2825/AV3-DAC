@@ -525,11 +525,11 @@
 }
 
 .explosion {
-  animation: confetiSettle 5s;
+  animation: confetiSettle 2s;
 }
 
 .explosion > span {
-  animation: confetiSpread 5s cubic-bezier(0, 1.31, 1, 1);
+  animation: confetiSpread 1s cubic-bezier(0, 1.31, 1, 1);
 }
 
 @keyframes confetiSpread {
