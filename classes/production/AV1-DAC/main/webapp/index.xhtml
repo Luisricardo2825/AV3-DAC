@@ -1,0 +1,26 @@
+<!--
+	Pagina responsavel pelo cadastro de um Jogo
+-->
+
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>Cadastro</title>
+	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+</h:head>
+<h:body>
+	<f:metadata>
+		<f:viewAction action="#{jogoBean.initValues()}"></f:viewAction>
+	</f:metadata>
+	<h:form>
+		<span class="ui-float-label">
+			<p:inputText id="float-input" />
+			<p:outputLabel for="@previous" value="Username" />
+		</span>
+	</h:form>
+</h:body>
+
+</html>
