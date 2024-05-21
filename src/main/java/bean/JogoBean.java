@@ -127,7 +127,7 @@ public class JogoBean {
 				throw new Exception("Os valores precisam estar entre 1 a 10, verifique os dados e tente novamente");
 			}
 
-			// Salva o jogo no banco de dados e adiciona a lista de jogos
+			// Atualiza o jogo no banco de dados e adiciona a lista de jogos
 			Jogo novoJogo = JogoDAO.update(jogoSelecionado);
 
 			addMessage("Sucesso", "Editado com sucesso!" + novoJogo.getValues());
@@ -168,7 +168,7 @@ public class JogoBean {
 	}
 
 	/**
-	 * Metodo usado para contar a quantidae de jogos cadastrados no banco de dados
+	 * Metodo usado para infromar se o usuário acertou o numero sorteado
 	 * 
 	 * @return Void
 	 */
