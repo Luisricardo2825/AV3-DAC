@@ -5,30 +5,33 @@
 <!DOCTYPE html
 	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<title>Listagem</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<script src="https://cdn.tailwindcss.com"></script>
 	<style>
-		.ui-datatable-scrollable-body {
-			overflow-x: hidden !important;
-			min-height: 50vh !important;
-		}
+.ui-datatable-scrollable-body {
+	overflow-x: hidden !important;
+	min-height: 50vh !important;
+}
 
-		.ui-inputfield {
-			padding: 0px !important;
-			border: none !important;
-			outline: none !important;
-		}
+.ui-inputfield {
+	padding: 0px !important;
+	border: none !important;
+	outline: none !important;
+}
 
-		.ui-state-filled {
-			padding: 0px !important;
-			border: none !important;
-			outline: none !important;
-		}
-	</style>
+.ui-state-filled {
+	padding: 0px !important;
+	border: none !important;
+	outline: none !important;
+}
+</style>
 </h:head>
 <h:body>
 	<!-- Componente que exibe as mensagens popups -->
@@ -37,96 +40,91 @@
 	</p:growl>
 	<!-- FIM-Componente que exibe as mensagens popups -->
 	<nav class="bg-gray-800">
-		<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-			<div class="relative flex h-16 items-center justify-between">
-				<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-					<div class="hidden sm:ml-6 sm:block">
-						<div class="flex space-x-4">
-							<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-							<a href="index.xhtml"
-								class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro</a>
-							<a href="listagem.xhtml"
-								class=" bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Listagem</a>
-						</div>
+	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+		<div class="relative flex h-16 items-center justify-between">
+			<div
+				class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+				<div class="hidden sm:ml-6 sm:block">
+					<div class="flex space-x-4">
+						<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+						<a href="index.xhtml"
+							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro</a>
+						<a href="cadastro_campeonato.xhtml"
+							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro
+							campeonato</a> <a href="listagem.xhtml"
+							class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+							aria-current="page">Listagem jogos</a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</nav>
 	<div class="container mx-auto p-10">
 		<h:form id="form">
 
-			<p:dataTable id="jogosDataTable" var="jogo" value="#{jogoBean.jogos}" rowKey="#{jogo.id}"
-				selection="#{jogoBean.jogoSelecionado}" selectionMode="single" class="overflow-x-hidden"
-				scrollable="true" scrollHeight="50%">
-				<f:facet name="header">
-					<div class="flex flex-1 items-center justify-between">
-						<div>Clique com o botão direito para abrir o menu</div>
-						<p:commandButton id="maiorDaTabela" action="#{jogoBean.maiorSorteadoDaTabela}" icon="pi pi-star"
-							styleClass="ui-button-success" update="form mensagens" />
-						<p:tooltip for="maiorDaTabela" value="Maior numero sorteado" position="top" />
-					</div>
-				</f:facet>
+			<p:dataTable id="jogosDataTable" var="jogo" value="#{jogoBean.jogos}"
+				rowKey="#{jogo.id}" selection="#{jogoBean.jogoSelecionado}"
+				selectionMode="single" class="overflow-x-hidden" scrollable="true"
+				scrollHeight="50%">
 
 				<p:column headerText="Id">
 					<h:outputText value="#{jogo.id}" />
 				</p:column>
-				<p:column headerText="Valores">
-					<h:outputText value="#{jogo.values}" />
+				<p:column headerText="Campeonato">
+					<h:outputText value="#{jogo.campeonato.nome}" />
+				</p:column>
+				<p:column headerText="Time 1">
+					<h:outputText value="#{jogo.time1}" />
+				</p:column>
+				<p:column headerText="Gols time 1">
+					<h:outputText value="#{jogo.golsTime1}" />
+				</p:column>
+				<p:column headerText="Time 2">
+					<h:outputText value="#{jogo.time2}" />
+				</p:column>
+				<p:column headerText="Gols time 2">
+					<h:outputText value="#{jogo.golsTime2}" />
 				</p:column>
 				<p:column headerText="Data Cadastro">
 					<h:outputText value="#{jogo.dataCadastro}">
 						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 					</h:outputText>
 				</p:column>
+				<p:column headerText="Data Partida">
+					<h:outputText value="#{jogo.dataPartida}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
 				<p:column headerText="Ações"
 					styleClass="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start gap-4">
 					<p:commandButton id="editar" oncomplete="PF('jogoDialog').show()"
-						action="#{jogoBean.initEdit(jogo)}" icon="pi pi-pencil" styleClass="ui-button-success"
-						update="form mensagens" />
+						action="#{jogoBean.initEdit(jogo)}" icon="pi pi-pencil"
+						styleClass="ui-button-success" update="form mensagens" />
 					<p:tooltip for="editar" value="Editar linha" position="top" />
 
-					<p:commandButton id="deletar" update="form mensagens" icon="pi pi-times"
-						action="#{jogoBean.delete(jogo.id)}" styleClass="ui-button-danger">
-						<p:confirm type="popup" header="Confirmação" message="Confirma a deleção?"
-							icon="pi pi-info-circle" />
+					<p:commandButton id="deletar" update="form mensagens"
+						icon="pi pi-times" action="#{jogoBean.delete(jogo.id)}"
+						styleClass="ui-button-danger">
+						<p:confirm type="popup" header="Confirmação"
+							message="Confirma a deleção?" icon="pi pi-info-circle" />
 					</p:commandButton>
 					<p:tooltip for="deletar" value="Deletar linha" position="top" />
 
-					<p:commandButton id="Result" update="form mensagens" icon="pi pi-star"
-						action="#{jogoBean.sorteado(jogo.id)}" styleClass="ui-button-warning" />
-					<p:tooltip for="Result" value="Result" position="top" />
-
-					<p:commandButton id="maiorNumero" update="form mensagens" icon="pi pi-arrow-up"
-						action="#{jogoBean.maiorEntreOsValores(jogo.id)}" styleClass="ui-button-primary" />
-					<p:tooltip for="maiorNumero" value="Maior numero" position="top" />
-
 				</p:column>
 			</p:dataTable>
-			<!--Inicio Menu de opções(Editar,Deletar)-->
-			<p:contextMenu for="jogosDataTable">
-				<p:menuitem value="Editar" update="jogoDetail" oncomplete="PF('jogoDialog').show()"
-					actionListener="#{jogoBean.initEdit(null)}" icon="pi pi-pencil" />
-				<p:menuitem value="Deletar" update="jogosDataTable mensagens" icon="pi pi-times"
-					action="#{jogoBean.delete(null)}">
-					<p:confirm type="popup" header="Confirmação" message="Confirma a deleção?"
-						icon="pi pi-info-circle" />
-				</p:menuitem>
-				<p:menuitem value="Revelar numero sorteado" update="jogosDataTable mensagens" icon="pi pi-star"
-					action="#{jogoBean.sorteado(null)}" />
-				<p:menuitem value="Maior numero" update="jogosDataTable mensagens" icon="pi pi-arrow-up"
-					action="#{jogoBean.maiorEntreOsValores(null)}" />
-			</p:contextMenu>
-			<!--Fim Menu de opções(Editar,Deletar)-->
 
 			<p:confirmPopup global="true">
-				<p:commandButton value="Cancelar" type="button" styleClass="ui-confirm-popup-no ui-button-flat" />
-				<p:commandButton value="Confirmar" type="button" styleClass="ui-confirm-popup-yes" />
+				<p:commandButton value="Cancelar" type="button"
+					styleClass="ui-confirm-popup-no ui-button-flat" />
+				<p:commandButton value="Confirmar" type="button"
+					styleClass="ui-confirm-popup-yes" />
 			</p:confirmPopup>
 
 			<!--Caixa de dialogo do menu de edição-->
-			<p:dialog header="Editar do jogo" widgetVar="jogoDialog" modal="true" showEffect="fade" hideEffect="fade"
-				resizable="false" dynamic="true" appendToBody="true" styleClass="field col-6 md:col-4"
+			<p:dialog header="Editar do jogo" widgetVar="jogoDialog" modal="true"
+				showEffect="fade" hideEffect="fade" resizable="false" dynamic="true"
+				appendToBody="true" styleClass="field col-6 md:col-4"
 				closeOnEscape="true" closable="false">
 				<p:outputPanel id="jogoDetail" style="text-align:center;">
 					<p:column rendered="#{not empty jogoBean.jogoSelecionado}">
@@ -135,7 +133,8 @@
 							<!--Campo numero 1-->
 							<div class="field col-6 md:col-4">
 								<div>
-									<label for="v1" class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="v1"
+										class="block text-sm font-medium leading-6 text-gray-900">Numero
 										1</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
@@ -143,8 +142,8 @@
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');" id="v1"
-											value="#{jogoBean.jogoSelecionado.v1}" minValue="1" maxlength="2"
-											type="text"
+											value="#{jogoBean.jogoSelecionado.v1}" minValue="1"
+											maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 1" />
@@ -158,7 +157,8 @@
 							<div class="field col-6 md:col-4">
 
 								<div>
-									<label for="v2" class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="v2"
+										class="block text-sm font-medium leading-6 text-gray-900">Numero
 										2</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
@@ -166,8 +166,8 @@
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');" id="v2"
-											value="#{jogoBean.jogoSelecionado.v2}" min="0" minValue="1" maxlength="2"
-											type="text"
+											value="#{jogoBean.jogoSelecionado.v2}" min="0" minValue="1"
+											maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 2" />
@@ -181,7 +181,8 @@
 							<div class="field col-6 md:col-4">
 
 								<div>
-									<label for="v3" class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="v3"
+										class="block text-sm font-medium leading-6 text-gray-900">Numero
 										3</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
@@ -189,8 +190,8 @@
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');" id="v3"
-											value="#{jogoBean.jogoSelecionado.v3}" minValue="1" maxlength="2"
-											type="text"
+											value="#{jogoBean.jogoSelecionado.v3}" minValue="1"
+											maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 3" />
@@ -204,7 +205,8 @@
 							<div class="field col-6 md:col-4">
 
 								<div>
-									<label for="v4" class="block text-sm font-medium leading-6 text-gray-900">NUmero
+									<label for="v4"
+										class="block text-sm font-medium leading-6 text-gray-900">NUmero
 										4</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
@@ -212,8 +214,8 @@
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');" id="v4"
-											value="#{jogoBean.jogoSelecionado.v4}" minValue="1" maxlength="2"
-											type="text"
+											value="#{jogoBean.jogoSelecionado.v4}" minValue="1"
+											maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 4" />
@@ -226,7 +228,8 @@
 							<!--Campo numero 5-->
 							<div class="field col-6 md:col-4">
 								<div>
-									<label for="v5" class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="v5"
+										class="block text-sm font-medium leading-6 text-gray-900">Numero
 										5</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
@@ -234,8 +237,8 @@
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');" id="v5"
-											value="#{jogoBean.jogoSelecionado.v5}" minValue="1" maxlength="2"
-											type="text"
+											value="#{jogoBean.jogoSelecionado.v5}" minValue="1"
+											maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 5" />
@@ -255,9 +258,10 @@
 											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="numeroSorteado"
-											value="#{jogoBean.jogoSelecionado.numeroSorteado}" minValue="1"
-											maxlength="2" type="text"
+										<h:inputText oninput="validity.valid||(value='');"
+											id="numeroSorteado"
+											value="#{jogoBean.jogoSelecionado.numeroSorteado}"
+											minValue="1" maxlength="2" type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
 											requiredMessage="Informe o numero 5" />
@@ -272,11 +276,12 @@
 									<label for="dataCadastro"
 										class="block text-sm font-medium leading-6 text-gray-900">Data
 										cadastro</label>
-									<p:datePicker id="dataCadastro" value="#{jogoBean.jogoSelecionado.dataCadastro}"
+									<p:datePicker id="dataCadastro"
+										value="#{jogoBean.jogoSelecionado.dataCadastro}"
 										showButtonBar="true"
 										styleClass="appearance-none block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-										<p:ajax event="dateSelect" listener="#{jogoBean.onDateTimeSelect}"
-											update="form" />
+										<p:ajax event="dateSelect"
+											listener="#{jogoBean.onDateTimeSelect}" update="form" />
 									</p:datePicker>
 								</div>
 							</div>
@@ -285,15 +290,18 @@
 							<div class="mt-5">
 								<!--Botão para cancelar a edição-->
 								<p:commandButton type="submit" value="Cancelar"
-									update="mensagens @([id$=jogosDataTable])" onclick="PF('jogoDialog').hide()"
+									update="mensagens @([id$=jogosDataTable])"
+									onclick="PF('jogoDialog').hide()"
 									styleClass="ui-button-outlined ui-button-danger" />
 								<!--Fim Botão para cancelar a edição-->
 
 								<!--Botão para confirmar a edição-->
-								<p:commandButton type="submit" value="Salvar" validateClient="true"
-									action="#{jogoBean.edit(null)}" process="@form"
+								<p:commandButton type="submit" value="Salvar"
+									validateClient="true" action="#{jogoBean.edit(null)}"
+									process="@form"
 									update="mensagens @([id$=jogosDataTable]) editForm"
-									onclick="PF('jogoDialog').hide()" styleClass="ui-button-filled ui-button-success" />
+									onclick="PF('jogoDialog').hide()"
+									styleClass="ui-button-filled ui-button-success" />
 								<!--Fim Botão para confirmar a edição-->
 							</div>
 
@@ -306,21 +314,17 @@
 
 		</h:form>
 	</div>
-	<div class="party" >
-		<span class="confeti">
+	<div class="party">
+		<span class="confeti"> <span></span> <span></span><span></span><span></span><span></span><span></span><span>
 
-			<span></span>
-
-			<span></span><span></span><span></span><span></span><span></span><span>
-
-			</span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+		</span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
 
 		</span>
 	</div>
 	<script type="text/javascript">
-	
-		
-		function explodeConfeti(){
+
+
+		function explodeConfeti() {
 			const confetiButton = document.querySelector('.party');
 
 			const confetiContainer = confetiButton.querySelector('.confeti');

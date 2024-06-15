@@ -1,27 +1,20 @@
 package entidades;
 
 import java.util.Date;
-import java.util.Random;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-
-
-@NamedQueries({
-	@NamedQuery(
-	name = "maxNumeroSorteado",
-	query = "SELECT max(a.numeroSorteado) FROM Jogo a"
-	)
-})
 @Entity
 @Table
 public class Jogo {
@@ -33,32 +26,53 @@ public class Jogo {
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
+	Date dataPartida = new Date();
+
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
 	Date dataCadastro = new Date();
 
 	@Column
-	Integer numeroSorteado = (new Random()).nextInt(10 - 1) + 1;
+	@Enumerated(EnumType.STRING)
+	Times time1;
 
 	@Column
-	Integer v1;
+	@Enumerated(EnumType.STRING)
+	Times time2;
+
+	@ManyToOne
+	Campeonato campeonato;
 
 	@Column
-	Integer v2;
+	Integer golsTime1;
 
 	@Column
-	Integer v3;
-
-	@Column
-	Integer v4;
-
-	@Column
-	Integer v5;
+	Integer golsTime2;
 	
+	Integer idCampeonato;
+
+	public Integer getIdCampeonato() {
+		return idCampeonato;
+	}
+
+	public void setIdCampeonato(Integer idCampeonato) {
+		this.idCampeonato = idCampeonato;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Date getDataPartida() {
+		return dataPartida;
+	}
+
+	public void setDataPartida(Date dataPartida) {
+		this.dataPartida = dataPartida;
 	}
 
 	public Date getDataCadastro() {
@@ -69,99 +83,58 @@ public class Jogo {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Integer getNumeroSorteado() {
-		return numeroSorteado;
+	public Times getTime1() {
+		return time1;
 	}
 
-	public void setNumeroSorteado(Integer numeroSorteado) {
-		this.numeroSorteado = numeroSorteado;
+	public void setTime1(Times time1) {
+		this.time1 = time1;
 	}
 
-	public Integer getV1() {
-		return v1;
+	public Times getTime2() {
+		return time2;
 	}
 
-	public void setV1(Integer v1) {
-		this.v1 = v1;
+	public void setTime2(Times time2) {
+		this.time2 = time2;
 	}
 
-	public Integer getV2() {
-		return v2;
+	public Campeonato getCampeonato() {
+		return campeonato;
 	}
 
-	public void setV2(Integer v2) {
-		this.v2 = v2;
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
 	}
 
-	public Integer getV3() {
-		return v3;
+	public Integer getGolsTime1() {
+		return golsTime1;
 	}
 
-	public void setV3(Integer v3) {
-		this.v3 = v3;
+	public void setGolsTime1(Integer golsTime1) {
+		this.golsTime1 = golsTime1;
 	}
 
-	public Integer getV4() {
-		return v4;
+	public Integer getGolsTime2() {
+		return golsTime2;
 	}
 
-	public void setV4(Integer v4) {
-		this.v4 = v4;
+	public void setGolsTime2(Integer golsTime2) {
+		this.golsTime2 = golsTime2;
 	}
 
-	public Integer getV5() {
-		return v5;
-	}
+	public enum Times {
+		A,
+		B,
+		C;
 
-	public void setV5(Integer v5) {
-		this.v5 = v5;
-	}
+		public boolean equals(Times time) {
+			return this == time;
+		}
 
-	public String getValues() {
-
-		return v1 + "," + v2 + "," + v3 + "," + v4 + "," + v5;
-	}
-
-	public Integer getGreaterBetweenValues() {
-
-		Integer greater = v1;
-
-		if (greater < v2)
-			greater = v2;
-
-		if (greater < v3)
-			greater = v3;
-
-		if (greater < v4)
-			greater = v4;
-
-		if (greater < v5)
-			greater = v5;
-
-		return greater;
-	}
-
-	public boolean getSorteadoIsInValues() {
-
-		if (numeroSorteado == v1 || numeroSorteado == v2 || numeroSorteado == v3 || numeroSorteado == v4
-				|| numeroSorteado == v5)
-			return true;
-
-		return false;
-
-	}
-
-	/**
-	 * Checa se os valores estao entre 1 e 10
-	 *
-	 * @return true se estiverem entre 1 e 10, false caso contrario
-	 */
-	public boolean checkValues() {
-
-		if (v1 > 10 || v1 < 1 || v2 > 10 || v2 < 1 || v3 > 10 || v3 < 1 || v4 > 10 || v4 < 1 || v5 > 10 || v5 < 1)
-			return false;
-
-		return true;
+		public List<String> getTimes() {
+			return List.of(A.toString(), B.toString(), C.toString());
+		}
 	}
 
 }

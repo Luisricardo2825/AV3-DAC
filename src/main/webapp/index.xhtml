@@ -5,8 +5,11 @@
 <!DOCTYPE html
 	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<title>Cadastro</title>
 	<!-- <link rel="stylesheet" type="text/css" href="css/styles.css" /> -->
@@ -21,127 +24,141 @@
 	<p:growl id="mensagens" showDetail="true" />
 	<!-- FIM-Componente que exibe as mensagens popups -->
 	<nav class="bg-gray-800">
-		<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-			<div class="relative flex h-16 items-center justify-between">
-				<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-					<div class="hidden sm:ml-6 sm:block">
-						<div class="flex space-x-4">
-							<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-							<a href="index.xhtml"
-								class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-								aria-current="page">Cadastro</a>
-							<a href="listagem.xhtml"
-								class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listagem</a>
-						</div>
+	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+		<div class="relative flex h-16 items-center justify-between">
+			<div
+				class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+				<div class="hidden sm:ml-6 sm:block">
+					<div class="flex space-x-4">
+						<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+						<a href="index.xhtml" aria-current="page"
+							class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro</a>
+						<a href="cadastro_campeonato.xhtml"
+							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro
+							campeonato</a> <a href="listagem.xhtml"
+							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listagem
+							jogos</a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</nav>
-	<div class="container mx-auto max-w-96 min-h-[80vh] justify-center content-center">
-		<h:form class="bg-stone-200 p-4 rounded shadow-md">
+	<div
+		class="container mx-auto max-w-96 min-h-[80vh] justify-center content-center">
+		<h:form id="cadastroJogo" class="bg-stone-200 p-4 rounded shadow-md">
 
-			<!--Campo numero 1-->
+			<!-- Campo Time 1 -->
 			<div class="field col-6 md:col-4">
 				<div>
-					<label for="v1" class="block text-sm font-medium leading-6 text-gray-900">Numero
+					<label for="time1"
+						class="block text-sm font-medium leading-6 text-gray-900">Time
 						1</label>
 					<div class="relative mt-2 rounded-md shadow-sm">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span class="text-gray-500 sm:text-sm">#</span>
-						</div>
-						<h:inputText oninput="validity.valid||(value='');" id="v1" value="#{jogoBean.jogo.v1}"
-							minValue="1" maxlength="2" type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-							placeholder="0.00" decimalPlaces="0" required="true" requiredMessage="Informe o numero 1" />
-
+						<p:selectOneMenu id="time1" value="#{jogoBean.jogo.time1}"
+							styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+							<f:selectItems value="#{jogoBean.times}" />
+						</p:selectOneMenu>
 					</div>
 				</div>
 			</div>
-			<!--Fim Campo numero 1-->
+			<!-- Fim Campo Time 1 -->
 
-			<!--Campo numero 2-->
+			<!-- Campo Time 2 -->
 			<div class="field col-6 md:col-4">
-
 				<div>
-					<label for="v2" class="block text-sm font-medium leading-6 text-gray-900">Numero
+					<label for="time2"
+						class="block text-sm font-medium leading-6 text-gray-900">Time
 						2</label>
 					<div class="relative mt-2 rounded-md shadow-sm">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span class="text-gray-500 sm:text-sm">#</span>
-						</div>
-						<h:inputText oninput="validity.valid||(value='');" id="v2" value="#{jogoBean.jogo.v2}" min="0"
-							minValue="1" maxlength="2" type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-							placeholder="0.00" decimalPlaces="0" required="true" requiredMessage="Informe o numero 2" />
-
+						<p:selectOneMenu id="time2" value="#{jogoBean.jogo.time2}"
+							styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+							<f:selectItems value="#{jogoBean.times}" />
+						</p:selectOneMenu>
 					</div>
 				</div>
 			</div>
-			<!--Fim Campo numero 2-->
+			<!-- Fim Campo Time 2 -->
 
-			<!--Campo numero 3-->
+			<!-- Campo Data da partida -->
 			<div class="field col-6 md:col-4">
-
-				<div>
-					<label for="v3" class="block text-sm font-medium leading-6 text-gray-900">Numero
-						3</label>
-					<div class="relative mt-2 rounded-md shadow-sm">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span class="text-gray-500 sm:text-sm">#</span>
-						</div>
-						<h:inputText oninput="validity.valid||(value='');" id="v3" value="#{jogoBean.jogo.v3}"
-							minValue="1" maxlength="2" type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-							placeholder="0.00" decimalPlaces="0" required="true" requiredMessage="Informe o numero 3" />
-
-					</div>
-				</div>
+				<label for="dataPartida"
+					class="block text-sm font-medium leading-6 text-gray-900">Data
+					partida</label>
+				<p:datePicker id="dataPartida" value="#{jogoBean.jogo.dataPartida}"
+					showButtonBar="true">
+					<p:ajax event="dateSelect" listener="#{jogoBean.onDateTimeSelect}"
+						update="cadastroJogo" />
+				</p:datePicker>
 			</div>
-			<!--Fim Campo numero 3-->
+			<!-- Fim Campo Data da partida -->
 
-			<!--Campo numero 4-->
-			<div class="field col-6 md:col-4">
-
-				<div>
-					<label for="v4" class="block text-sm font-medium leading-6 text-gray-900">Numero
-						4</label>
-					<div class="relative mt-2 rounded-md shadow-sm">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span class="text-gray-500 sm:text-sm">#</span>
-						</div>
-						<h:inputText oninput="validity.valid||(value='');" id="v4" value="#{jogoBean.jogo.v4}"
-							minValue="1" maxlength="2" type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-							placeholder="0.00" decimalPlaces="0" required="true" requiredMessage="Informe o numero 4" />
-
-					</div>
-				</div>
-			</div>
-			<!--Fim Campo numero 4-->
-
-			<!--Campo numero 5-->
+			<!-- Campo Time 2 -->
 			<div class="field col-6 md:col-4">
 				<div>
-					<label for="v5" class="block text-sm font-medium leading-6 text-gray-900">Numero
-						5</label>
+					<label for="campeonato"
+						class="block text-sm font-medium leading-6 text-gray-900">Campeonato</label>
 					<div class="relative mt-2 rounded-md shadow-sm">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span class="text-gray-500 sm:text-sm">#</span>
-						</div>
-						<h:inputText oninput="validity.valid||(value='');" id="v5" value="#{jogoBean.jogo.v5}"
-							minValue="1" maxlength="2" type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-							placeholder="0.00" decimalPlaces="0" required="true" requiredMessage="Informe o numero 5" />
+						<p:selectOneMenu id="campeonato"
+							value="#{jogoBean.jogo.idCampeonato}"
+							styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+							<f:selectItem rendered="#{jogoBean.campeonatos == null}"
+								itemLabel="Sem campeonatos" itemValue="" />
+							<f:selectItems value="#{jogoBean.campeonatos}" />
+						</p:selectOneMenu>
 					</div>
 				</div>
 			</div>
-			<!--Fim Campo numero 5-->
+			<!-- Fim Campo Time 2 -->
+
+			<!--Campo gols time 1-->
+			<div class="field col-6 md:col-4">
+				<div>
+					<label for="golsTime1"
+						class="block text-sm font-medium leading-6 text-gray-900">Gols
+						time 1</label>
+					<div class="relative mt-2 rounded-md shadow-sm">
+						<div
+							class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+							<span class="text-gray-500 sm:text-sm">#</span>
+						</div>
+						<h:inputText oninput="validity.valid||(value='');" id="golsTime1"
+							value="#{jogoBean.jogo.golsTime1}" type="text"
+							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							placeholder="0.00" decimalPlaces="0" required="true"
+							requiredMessage="Informe os gols do time 1" />
+
+					</div>
+				</div>
+			</div>
+			<!--Fim Campo gols time 1-->
+
+			<!--Campo gols time 2-->
+			<div class="field col-6 md:col-4">
+				<div>
+					<label for="golsTime2"
+						class="block text-sm font-medium leading-6 text-gray-900">Gols
+						time 2</label>
+					<div class="relative mt-2 rounded-md shadow-sm">
+						<div
+							class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+							<span class="text-gray-500 sm:text-sm">#</span>
+						</div>
+						<h:inputText oninput="validity.valid||(value='');" id="golsTime2"
+							value="#{jogoBean.jogo.golsTime2}" type="number"
+							class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							placeholder="0" decimalPlaces="0" required="true"
+							requiredMessage="Informe os gols do time 2" />
+
+					</div>
+				</div>
+			</div>
+			<!--Fim Campo gols time 2-->
 
 			<!--Botão para confirmar cadastro-->
 			<div class="flex w-full justify-center p-5">
-				<p:commandButton type="submit" value="Salvar" validateClient="true" action="#{jogoBean.save}"
-					update="mensagens" />
+				<p:commandButton type="submit" value="Salvar" validateClient="true"
+					action="#{jogoBean.save}" update="mensagens" />
 			</div>
 			<!--Fim Botão para confirmar cadastro-->
 

@@ -2,6 +2,7 @@ package bean;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,11 +11,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
+import dao.GenericDAO;
 import dao.JogoDAO;
+import entidades.Campeonato;
 import entidades.Jogo;
 
 @ManagedBean
@@ -28,6 +31,25 @@ public class JogoBean {
 	private Jogo jogo = new Jogo();
 
 	private List<Jogo> jogos;
+
+	private List<SelectItem> times = new ArrayList<SelectItem>();
+	private List<SelectItem> campeonatos = null;
+
+	public List<SelectItem> getCampeonatos() {
+		return campeonatos;
+	}
+
+	public void setCampeonatos(List<SelectItem> campeonatos) {
+		this.campeonatos = campeonatos;
+	}
+
+	public List<SelectItem> getTimes() {
+		return times;
+	}
+
+	public void setTimes(List<SelectItem> times) {
+		this.times = times;
+	}
 
 	/**
 	 * Metodo usado para buscar um jogo pelo ID de um Jogo
@@ -65,6 +87,10 @@ public class JogoBean {
 		jogo = new Jogo();
 		dataAtual = new Date();
 		jogos = JogoDAO.getAll();
+		times = Jogo.Times.A.getTimes().stream().map(time -> new SelectItem(time, time)).toList();
+		List<SelectItem> camps = new GenericDAO<Campeonato>(Campeonato.class).getAll().stream()
+				.map(campeonato -> new SelectItem(campeonato.getId(), campeonato.getNome())).toList();
+		campeonatos = camps.size() > 0 ? camps : null;
 
 	}
 
@@ -90,9 +116,14 @@ public class JogoBean {
 	public void save() {
 
 		try {
-
-			if (!jogo.checkValues())
-				throw new Exception("Os valores precisam estar entre 1 a 10, verifique os dados e tente novamente");
+			if (jogo.getTime1().equals(jogo.getTime2())) {
+				throw new Exception("Os times não podem ser iguais!");
+			}
+			if (jogo.getIdCampeonato() == null) {
+				throw new Exception("Selecione um campeonato!");
+			}
+			Campeonato camp = new GenericDAO<Campeonato>(Campeonato.class).getById(jogo.getIdCampeonato());
+			jogo.setCampeonato(camp);
 			// Salva novo jogo
 			JogoDAO.save(jogo);
 			// Adiciona o jogo na lista de jogos
@@ -106,7 +137,7 @@ public class JogoBean {
 		} catch (Exception erroAoSalvar) {
 			erroAoSalvar.printStackTrace();
 			String mensagemDeErro = erroAoSalvar.getLocalizedMessage();
-			addMessage("Erro ao salvar", mensagemDeErro);
+			addMessage("Erro ao salvar", mensagemDeErro, true);
 		}
 
 	}
@@ -122,15 +153,17 @@ public class JogoBean {
 			jogoSelecionado = getById(id);
 
 		try {
-			if (!jogoSelecionado.checkValues()) {
-				jogos = JogoDAO.getAll();
-				throw new Exception("Os valores precisam estar entre 1 a 10, verifique os dados e tente novamente");
+			if (jogoSelecionado.getTime1().equals(jogoSelecionado.getTime2())) {
+				throw new Exception("Os times não podem ser iguais!");
 			}
 
+			if (jogoSelecionado.getCampeonato() == null) {
+				throw new Exception("Selecione um campeonato!");
+			}
 			// Atualiza o jogo no banco de dados e adiciona a lista de jogos
 			Jogo novoJogo = JogoDAO.update(jogoSelecionado);
 
-			addMessage("Sucesso", "Editado com sucesso!" + novoJogo.getValues());
+			addMessage("Sucesso", "Editado com sucesso!" + novoJogo.getId());
 
 			// Instancia novo jogo sem valores preenchidos(todos estão como "null")
 			jogo = new Jogo();
@@ -141,7 +174,7 @@ public class JogoBean {
 		} catch (Exception erroAoEditar) {
 			erroAoEditar.printStackTrace();
 			String mensagemDeErro = erroAoEditar.getLocalizedMessage();
-			addMessage("Erro ao editar", mensagemDeErro);
+			addMessage("Erro ao editar", mensagemDeErro, true);
 		}
 
 	}
@@ -166,46 +199,7 @@ public class JogoBean {
 		addMessage("Deletado", "Deletado com sucesso!");
 
 	}
-
-	/**
-	 * Metodo usado para infromar se o usuário acertou o numero sorteado
-	 * 
-	 * @return Void
-	 */
-	public void sorteado(Integer id) {
-		if (id != null)
-			jogoSelecionado = getById(id);
-
-		// Retorna a quantidade de jogos cadastrados no banco de dados
-		int numeroSorteado = jogoSelecionado.getNumeroSorteado();
-
-		if (jogoSelecionado.getSorteadoIsInValues()) {
-
-			addMessage("Parabens!", "Você acertou o numero sorteado: " + numeroSorteado);
-			PrimeFaces.current().executeScript("explodeConfeti()");
-		} else {
-			addMessage("Informativo", "Você não acertou o numero sorteado :( ");
-		}
-
-	}
-
-	public void maiorEntreOsValores(Integer id) {
-		if (id != null)
-			jogoSelecionado = getById(id);
-
-		Integer greater = jogoSelecionado.getGreaterBetweenValues();
-
-		addMessage("Informativo", "O maior numero escolhido foi: " + greater);
-
-	}
-
-	public void maiorSorteadoDaTabela() {
-
-		Integer greater = JogoDAO.getMax();
-
-		addMessage("Informativo", "O maior numero sorteado da tabela foi: " + greater);
-
-	}
+	// PrimeFaces.current().executeScript("explodeConfeti()");
 
 	// ---- GETTERS E SETTERS -----
 
@@ -241,6 +235,12 @@ public class JogoBean {
 
 	public void setJogoSelecionado(Jogo jogoSelecionado) {
 		this.jogoSelecionado = jogoSelecionado;
+	}
+
+	public void addMessage(String summary, String detail, boolean error) {
+		FacesMessage message = new FacesMessage(error ? FacesMessage.SEVERITY_FATAL : FacesMessage.SEVERITY_INFO,
+				summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	public void addMessage(String summary, String detail) {
