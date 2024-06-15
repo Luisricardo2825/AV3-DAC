@@ -67,7 +67,13 @@
 				rowKey="#{jogo.id}" selection="#{jogoBean.jogoSelecionado}"
 				selectionMode="single" class="overflow-x-hidden" scrollable="true"
 				scrollHeight="50%">
-
+				<f:facet name="header">
+					Jogos
+					<p:commandButton id="resultados"
+						oncomplete="PF('resultadoDialog').show()" value="Resultados"
+						styleClass="ui-button-success" update="form mensagens" />
+					<p:tooltip for="editar" value="Resultados" position="top" />
+				</f:facet>
 				<p:column headerText="Id">
 					<h:outputText value="#{jogo.id}" />
 				</p:column>
@@ -121,6 +127,40 @@
 					styleClass="ui-confirm-popup-yes" />
 			</p:confirmPopup>
 
+			<p:dialog header="Resultados" widgetVar="resultadoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+				dynamic="true" appendToBody="true"
+				styleClass="field col-12 md:col-4" closeOnEscape="true"
+				closable="true" width="740" height="340">
+				<p:dataTable id="resultadosDataTable" var="time"
+					value="#{jogoBean.resultados}" rowKey="#{time.time}"
+					class="overflow-x-hidden" scrollable="true" size="small">
+					<p:column headerText="Time">
+						<h:outputText value="#{time.time}" />
+					</p:column>
+					<p:column headerText="Vitorias">
+						<h:outputText value="#{time.vitorias}" />
+					</p:column>
+					<p:column headerText="Empates">
+						<h:outputText value="#{time.empates}" />
+					</p:column>
+					<p:column headerText="Derrotas">
+						<h:outputText value="#{time.derrotas}" />
+					</p:column>
+					<p:column headerText="Gols feitos">
+						<h:outputText value="#{time.golsFeitos}" />
+					</p:column>
+					<p:column headerText="Gols sofridos">
+						<h:outputText value="#{time.golsSofridos}" />
+					</p:column>
+					<p:column headerText="Saldo de gols">
+						<h:outputText value="#{time.saldoDeGols}" />
+					</p:column>
+					<p:column headerText="Pontuação">
+						<h:outputText value="#{time.pontuacao}" />
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
 			<!--Caixa de dialogo do menu de edição-->
 			<p:dialog header="Editar do jogo" widgetVar="jogoDialog" modal="true"
 				showEffect="fade" hideEffect="fade" resizable="false" dynamic="true"
@@ -130,180 +170,127 @@
 					<p:column rendered="#{not empty jogoBean.jogoSelecionado}">
 						<!--Formulario de edição-->
 						<h:form id="editForm">
-							<!--Campo numero 1-->
+							<!-- Campo Time 1 -->
 							<div class="field col-6 md:col-4">
 								<div>
-									<label for="v1"
-										class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="time1"
+										class="block text-sm font-medium leading-6 text-gray-900">Time
 										1</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
-										<div
-											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500 sm:text-sm">#</span>
-										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="v1"
-											value="#{jogoBean.jogoSelecionado.v1}" minValue="1"
-											maxlength="2" type="text"
-											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 1" />
-
+										<p:selectOneMenu id="time1"
+											value="#{jogoBean.jogoSelecionado.time1}"
+											styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+											<f:selectItems value="#{jogoBean.times}" />
+										</p:selectOneMenu>
 									</div>
 								</div>
 							</div>
-							<!--Fim Campo numero 1-->
+							<!-- Fim Campo Time 1 -->
 
-							<!--Campo numero 2-->
+							<!-- Campo Time 2 -->
 							<div class="field col-6 md:col-4">
-
 								<div>
-									<label for="v2"
-										class="block text-sm font-medium leading-6 text-gray-900">Numero
+									<label for="time2"
+										class="block text-sm font-medium leading-6 text-gray-900">Time
 										2</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
-										<div
-											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500 sm:text-sm">#</span>
-										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="v2"
-											value="#{jogoBean.jogoSelecionado.v2}" min="0" minValue="1"
-											maxlength="2" type="text"
-											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 2" />
-
+										<p:selectOneMenu id="time2"
+											value="#{jogoBean.jogoSelecionado.time2}"
+											styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+											<f:selectItems value="#{jogoBean.times}" />
+										</p:selectOneMenu>
 									</div>
 								</div>
 							</div>
-							<!--Fim Campo numero 2-->
+							<!-- Fim Campo Time 2 -->
 
-							<!--Campo numero 3-->
+							<!-- Campo Data da partida -->
 							<div class="field col-6 md:col-4">
+								<label for="dataPartida"
+									class="block text-sm font-medium leading-6 text-gray-900">Data
+									partida</label>
+								<p:datePicker id="dataPartida"
+									value="#{jogoBean.jogo.dataPartida}"
+									styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									showButtonBar="true">
+									<p:ajax event="dateSelect"
+										listener="#{jogoBean.onDateTimeSelect}" update="editForm" />
+								</p:datePicker>
+							</div>
+							<!-- Fim Campo Data da partida -->
 
+							<!-- Campo Time 2 -->
+							<div class="field col-6 md:col-4">
 								<div>
-									<label for="v3"
-										class="block text-sm font-medium leading-6 text-gray-900">Numero
-										3</label>
+									<label for="campeonato"
+										class="block text-sm font-medium leading-6 text-gray-900">Campeonato</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
-										<div
-											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500 sm:text-sm">#</span>
-										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="v3"
-											value="#{jogoBean.jogoSelecionado.v3}" minValue="1"
-											maxlength="2" type="text"
-											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 3" />
-
+										<p:selectOneMenu id="campeonato"
+											value="#{jogoBean.jogoSelecionado.idCampeonato}"
+											styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+											<f:selectItem rendered="#{jogoBean.campeonatos == null}"
+												itemLabel="Sem campeonatos" itemValue="" />
+											<f:selectItems value="#{jogoBean.campeonatos}" />
+										</p:selectOneMenu>
 									</div>
 								</div>
 							</div>
-							<!--Fim Campo numero 3-->
+							<!-- Fim Campo Time 2 -->
 
-							<!--Campo numero 4-->
-							<div class="field col-6 md:col-4">
-
-								<div>
-									<label for="v4"
-										class="block text-sm font-medium leading-6 text-gray-900">NUmero
-										4</label>
-									<div class="relative mt-2 rounded-md shadow-sm">
-										<div
-											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500 sm:text-sm">#</span>
-										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="v4"
-											value="#{jogoBean.jogoSelecionado.v4}" minValue="1"
-											maxlength="2" type="text"
-											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 4" />
-
-									</div>
-								</div>
-							</div>
-							<!--Fim Campo numero 4-->
-
-							<!--Campo numero 5-->
+							<!--Campo gols time 1-->
 							<div class="field col-6 md:col-4">
 								<div>
-									<label for="v5"
-										class="block text-sm font-medium leading-6 text-gray-900">Numero
-										5</label>
-									<div class="relative mt-2 rounded-md shadow-sm">
-										<div
-											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500 sm:text-sm">#</span>
-										</div>
-										<h:inputText oninput="validity.valid||(value='');" id="v5"
-											value="#{jogoBean.jogoSelecionado.v5}" minValue="1"
-											maxlength="2" type="text"
-											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 5" />
-									</div>
-								</div>
-							</div>
-							<!--Fim Campo numero 5-->
-
-							<!--Campo numero sorteado-->
-							<div class="field col-6 md:col-4">
-								<div>
-									<label for="numeroSorteado"
-										class="block text-sm font-medium leading-6 text-gray-900">Numero
-										sorteado</label>
+									<label for="golsTime1"
+										class="block text-sm font-medium leading-6 text-gray-900">Gols
+										time 1</label>
 									<div class="relative mt-2 rounded-md shadow-sm">
 										<div
 											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 											<span class="text-gray-500 sm:text-sm">#</span>
 										</div>
 										<h:inputText oninput="validity.valid||(value='');"
-											id="numeroSorteado"
-											value="#{jogoBean.jogoSelecionado.numeroSorteado}"
-											minValue="1" maxlength="2" type="text"
+											id="golsTime1" value="#{jogoBean.jogoSelecionado.golsTime1}"
+											type="text"
 											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="0.00" decimalPlaces="0" required="true"
-											requiredMessage="Informe o numero 5" />
+											requiredMessage="Informe os gols do time 1" />
+
 									</div>
 								</div>
 							</div>
-							<!--Fim Campo numero sorteado-->
+							<!--Fim Campo gols time 1-->
 
-							<!--Campo data de cadastro-->
+							<!--Campo gols time 2-->
 							<div class="field col-6 md:col-4">
 								<div>
-									<label for="dataCadastro"
-										class="block text-sm font-medium leading-6 text-gray-900">Data
-										cadastro</label>
-									<p:datePicker id="dataCadastro"
-										value="#{jogoBean.jogoSelecionado.dataCadastro}"
-										showButtonBar="true"
-										styleClass="appearance-none block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-										<p:ajax event="dateSelect"
-											listener="#{jogoBean.onDateTimeSelect}" update="form" />
-									</p:datePicker>
+									<label for="golsTime2"
+										class="block text-sm font-medium leading-6 text-gray-900">Gols
+										time 2</label>
+									<div class="relative mt-2 rounded-md shadow-sm">
+										<div
+											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+											<span class="text-gray-500 sm:text-sm">#</span>
+										</div>
+										<h:inputText oninput="validity.valid||(value='');"
+											id="golsTime2" value="#{jogoBean.jogoSelecionado.golsTime2}"
+											type="number"
+											class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											placeholder="0" decimalPlaces="0" required="true"
+											requiredMessage="Informe os gols do time 2" />
+
+									</div>
 								</div>
 							</div>
-							<!--Fim Campo data de cadastro-->
+							<!--Fim Campo gols time 2-->
 
-							<div class="mt-5">
-								<!--Botão para cancelar a edição-->
-								<p:commandButton type="submit" value="Cancelar"
-									update="mensagens @([id$=jogosDataTable])"
-									onclick="PF('jogoDialog').hide()"
-									styleClass="ui-button-outlined ui-button-danger" />
-								<!--Fim Botão para cancelar a edição-->
-
-								<!--Botão para confirmar a edição-->
-								<p:commandButton type="submit" value="Salvar"
-									validateClient="true" action="#{jogoBean.edit(null)}"
-									process="@form"
-									update="mensagens @([id$=jogosDataTable]) editForm"
-									onclick="PF('jogoDialog').hide()"
-									styleClass="ui-button-filled ui-button-success" />
-								<!--Fim Botão para confirmar a edição-->
-							</div>
+							<!--Botão para confirmar a edição-->
+							<p:commandButton type="submit" value="Salvar"
+								validateClient="true" action="#{jogoBean.edit(null)}"
+								process="@form"
+								update="mensagens @([id$=jogosDataTable]) editForm"
+								onclick="PF('jogoDialog').hide()"
+								styleClass="ui-button-filled ui-button-success mt-5" />
+							<!--Fim Botão para confirmar a edição-->
 
 						</h:form>
 						<!--Fim Formulario de edição-->
@@ -314,31 +301,6 @@
 
 		</h:form>
 	</div>
-	<div class="party">
-		<span class="confeti"> <span></span> <span></span><span></span><span></span><span></span><span></span><span>
-
-		</span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-
-		</span>
-	</div>
-	<script type="text/javascript">
-
-
-		function explodeConfeti() {
-			const confetiButton = document.querySelector('.party');
-
-			const confetiContainer = confetiButton.querySelector('.confeti');
-			confetiContainer.classList.add('explosion');
-
-
-
-			confetiContainer.addEventListener('animationend', () => {
-
-				confetiContainer.classList.remove('explosion');
-
-			}, { once: true });
-		}
-	</script>
 </h:body>
 
 </html>

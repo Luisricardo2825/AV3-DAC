@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -19,6 +21,8 @@ import dao.GenericDAO;
 import dao.JogoDAO;
 import entidades.Campeonato;
 import entidades.Jogo;
+import entidades.Resultado;
+import entidades.Time;
 
 @ManagedBean
 @ViewScoped
@@ -87,7 +91,7 @@ public class JogoBean {
 		jogo = new Jogo();
 		dataAtual = new Date();
 		jogos = JogoDAO.getAll();
-		times = Jogo.Times.A.getTimes().stream().map(time -> new SelectItem(time, time)).toList();
+		times = Time.A.getTimes().stream().map(time -> new SelectItem(time, time)).toList();
 		List<SelectItem> camps = new GenericDAO<Campeonato>(Campeonato.class).getAll().stream()
 				.map(campeonato -> new SelectItem(campeonato.getId(), campeonato.getNome())).toList();
 		campeonatos = camps.size() > 0 ? camps : null;
@@ -157,9 +161,11 @@ public class JogoBean {
 				throw new Exception("Os times não podem ser iguais!");
 			}
 
-			if (jogoSelecionado.getCampeonato() == null) {
+			if (jogoSelecionado.getIdCampeonato() == null) {
 				throw new Exception("Selecione um campeonato!");
 			}
+			Campeonato camp = new GenericDAO<Campeonato>(Campeonato.class).getById(jogoSelecionado.getIdCampeonato());
+			jogoSelecionado.setCampeonato(camp);
 			// Atualiza o jogo no banco de dados e adiciona a lista de jogos
 			Jogo novoJogo = JogoDAO.update(jogoSelecionado);
 
@@ -199,8 +205,35 @@ public class JogoBean {
 		addMessage("Deletado", "Deletado com sucesso!");
 
 	}
-	// PrimeFaces.current().executeScript("explodeConfeti()");
 
+	public List<Resultado> getResultados() {
+		Time[] times = Time.class.getEnumConstants();
+		List<Resultado> resultados = new ArrayList<>();
+		for (Time time : times) {
+			List<Jogo> vitorias = time.getVitorias(jogos);
+			List<Jogo> empates = time.getEmpates(jogos);
+			List<Jogo> derrotas = time.getDerrotas(jogos);
+			List<Jogo> calc = Stream.concat(Stream.concat(vitorias.stream(), empates.stream()), derrotas.stream())
+					.collect(Collectors.toList());
+			Integer golsFeitos = calc.stream().mapToInt(j -> {
+				if (j.getTime1() == time)
+					return j.getGolsTime1();
+				if (j.getTime2() == time)
+					return j.getGolsTime2();
+				return 0;
+			}).sum();
+			Integer golsSofridos = calc.stream().mapToInt(j -> {
+				if (j.getTime1() == time)
+					return j.getGolsTime2();
+				if (j.getTime2() == time)
+					return j.getGolsTime1();
+				return 0;
+			}).sum();
+			resultados.add(new Resultado(time, vitorias.size(), empates.size(), derrotas.size(),
+					(vitorias.size() * 3) + empates.size(), golsFeitos, golsSofridos));
+		}
+		return resultados;
+	}
 	// ---- GETTERS E SETTERS -----
 
 	public void onDateTimeSelect(SelectEvent<LocalDateTime> event) {

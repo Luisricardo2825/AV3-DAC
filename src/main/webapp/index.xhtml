@@ -86,7 +86,7 @@
 					class="block text-sm font-medium leading-6 text-gray-900">Data
 					partida</label>
 				<p:datePicker id="dataPartida" value="#{jogoBean.jogo.dataPartida}"
-					showButtonBar="true">
+					showButtonBar="true" showTime="true" >
 					<p:ajax event="dateSelect" listener="#{jogoBean.onDateTimeSelect}"
 						update="cadastroJogo" />
 				</p:datePicker>

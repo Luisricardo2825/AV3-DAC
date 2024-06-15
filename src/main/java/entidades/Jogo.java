@@ -1,7 +1,6 @@
 package entidades;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table
@@ -34,11 +34,11 @@ public class Jogo {
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	Times time1;
+	Time time1;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	Times time2;
+	Time time2;
 
 	@ManyToOne
 	Campeonato campeonato;
@@ -48,7 +48,8 @@ public class Jogo {
 
 	@Column
 	Integer golsTime2;
-	
+
+	@Transient
 	Integer idCampeonato;
 
 	public Integer getIdCampeonato() {
@@ -83,19 +84,19 @@ public class Jogo {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Times getTime1() {
+	public Time getTime1() {
 		return time1;
 	}
 
-	public void setTime1(Times time1) {
+	public void setTime1(Time time1) {
 		this.time1 = time1;
 	}
 
-	public Times getTime2() {
+	public Time getTime2() {
 		return time2;
 	}
 
-	public void setTime2(Times time2) {
+	public void setTime2(Time time2) {
 		this.time2 = time2;
 	}
 
@@ -123,18 +124,18 @@ public class Jogo {
 		this.golsTime2 = golsTime2;
 	}
 
-	public enum Times {
-		A,
-		B,
-		C;
-
-		public boolean equals(Times time) {
-			return this == time;
+	public Time getVencedor() {
+		if (golsTime1 > golsTime2) {
+			return time1;
+		} else if (golsTime2 > golsTime1) {
+			return time2;
+		} else {
+			return null;
 		}
+	}
 
-		public List<String> getTimes() {
-			return List.of(A.toString(), B.toString(), C.toString());
-		}
+	public boolean isEmpate() {
+		return golsTime1.equals(golsTime2);
 	}
 
 }
