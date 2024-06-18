@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -17,7 +16,6 @@ import dao.GenericDAO;
 import entidades.Campeonato;
 
 @ManagedBean
-@ViewScoped
 public class CampeonatoBean {
 
     private GenericDAO<Campeonato> CampeonatoDAO = new GenericDAO<>(Campeonato.class);

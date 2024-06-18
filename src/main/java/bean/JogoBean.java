@@ -1,10 +1,14 @@
 package bean;
 
+import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +35,8 @@ public class JogoBean {
 	private Jogo jogoSelecionado;
 
 	private Date dataAtual;
+
+	private String timeFiltro;
 
 	private Jogo jogo = new Jogo();
 
@@ -107,8 +113,11 @@ public class JogoBean {
 	 * @return Void
 	 */
 	public void initEdit(Jogo jogo) {
-		if (jogo != null)
+		if (jogo != null) {
 			jogoSelecionado = jogo;
+			jogoSelecionado.setIdCampeonato(jogo.getCampeonato().getId());
+		}
+
 	}
 
 	/**
@@ -158,6 +167,7 @@ public class JogoBean {
 
 		try {
 			if (jogoSelecionado.getTime1().equals(jogoSelecionado.getTime2())) {
+				jogos = JogoDAO.getAll();
 				throw new Exception("Os times não podem ser iguais!");
 			}
 
@@ -203,6 +213,16 @@ public class JogoBean {
 		jogoSelecionado = null;
 
 		addMessage("Deletado", "Deletado com sucesso!");
+
+	}
+
+	public void filtrarJogos() {
+		if (timeFiltro == null || timeFiltro.equalsIgnoreCase("todos")) {
+			jogos = JogoDAO.getAll();
+			return;
+		} else {
+			jogos = JogoDAO.buscaTime(Time.valueOf(timeFiltro));
+		}
 
 	}
 
@@ -270,6 +290,14 @@ public class JogoBean {
 		this.jogoSelecionado = jogoSelecionado;
 	}
 
+	public String getTimeFiltro() {
+		return timeFiltro;
+	}
+
+	public void setTimeFiltro(String timeFiltro) {
+		this.timeFiltro = timeFiltro;
+	}
+
 	public void addMessage(String summary, String detail, boolean error) {
 		FacesMessage message = new FacesMessage(error ? FacesMessage.SEVERITY_FATAL : FacesMessage.SEVERITY_INFO,
 				summary, detail);
@@ -279,5 +307,93 @@ public class JogoBean {
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	
+	/// Não faz parte
+	private List<Jogo> jogosFiltrados;
+	
+	public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
+		String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
+		if ((filterText == null || filterText.trim().length() == 0)) {
+			return true;
+		}
+
+		Jogo jogo = (Jogo) value;
+		if (filterText.contains("=")) {
+			// split to list
+			List<String> list = Arrays.asList(filterText.split("&"));
+
+			List<Boolean> map = list.stream().map(item -> {
+				String[] split = item.split("=");
+				String nomeCampo = split[0];
+				String valorFiltro = split.length >= 2 ? split[1] : "";
+
+				if (valorFiltro.length() < 1)
+					return false;
+
+				if (nomeCampo.equalsIgnoreCase("time")) {
+					return jogo.getTime1().toString().toLowerCase().contains(valorFiltro)
+							|| jogo.getTime2().toString().toLowerCase().contains(valorFiltro);
+				}
+
+				Object valor = getField(jogo, nomeCampo);
+
+				if (nomeCampo.equalsIgnoreCase("campeonato")) {
+					Campeonato camp = (Campeonato) valor;
+					return camp.getNome().toLowerCase().contains(valorFiltro);
+				}
+
+				if (valor.getClass() == Timestamp.class || valor.getClass() == Date.class) {
+					String dateFormater = dateFormater((Date) valor);
+					System.out.println("Data: " + dateFormater + " valor recebido: " + valorFiltro);
+					return dateFormater.contains(valorFiltro);
+				}
+
+				return valor != null && valor.toString().toLowerCase().contains(valorFiltro) ? true : false;
+
+			}).toList();
+			return map.stream().allMatch(item -> item == true);
+		}
+		return jogo.getTime1().toString().toLowerCase().contains(filterText)
+				|| jogo.getTime2().toString().toLowerCase().contains(filterText)
+				|| Integer.toString(jogo.getGolsTime1()).contains(filterText)
+				|| Integer.toString(jogo.getGolsTime2()).contains(filterText)
+				|| Integer.toString(jogo.getId()).contains(filterText)
+				|| Integer.toString(jogo.getCampeonato().getId()).contains(filterText)
+				|| jogo.getCampeonato().getNome().toLowerCase().contains(filterText)
+				|| dateFormater(jogo.getDataPartida()).contains(filterText);
+
+	}
+
+	public <T> Object getField(T object, String fieldName) {
+		try {
+			Field[] fields = object.getClass().getDeclaredFields();
+			for (Field field : fields) {
+				if (field.getName().toLowerCase().equals(fieldName)) {
+
+					field.setAccessible(true);
+					Object value = field.get(object);
+					return value;
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public String dateFormater(Date data) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		LocalDateTime dateTime = LocalDateTime.ofInstant(data.toInstant(), java.time.ZoneId.systemDefault());
+		return dateTime.format(formatter);
+	}
+
+	public List<Jogo> getJogosFiltrados() {
+		return jogosFiltrados;
+	}
+
+	public void setJogosFiltrados(List<Jogo> jogosFiltrados) {
+		this.jogosFiltrados = jogosFiltrados;
 	}
 }

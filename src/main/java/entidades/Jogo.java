@@ -15,8 +15,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
 @Entity
 @Table
+@NamedQueries({ @NamedQuery(name = "buscaTime", query = "SELECT a FROM Jogo a where time1= :time OR time2= :time") })
 public class Jogo {
 
 	@Id
@@ -50,7 +54,7 @@ public class Jogo {
 	Integer golsTime2;
 
 	@Transient
-	Integer idCampeonato;
+	Integer idCampeonato = campeonato != null ? campeonato.getId() : null;
 
 	public Integer getIdCampeonato() {
 		return idCampeonato;

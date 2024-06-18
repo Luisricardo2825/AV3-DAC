@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import entidades.Jogo;
+import entidades.Time;
 
 public class JogoDAO {
 
@@ -63,11 +64,12 @@ public class JogoDAO {
 		return genDAO.getAll();
 	}
 
-	public static Integer getMax() {
-		return genDAO.customRule((em)->{
-			Query consultaBuscaTodos = em.createNamedQuery("maxNumeroSorteado");
-			Integer resultadoMax = (Integer) consultaBuscaTodos.getSingleResult();
-			return resultadoMax;
+	@SuppressWarnings("unchecked")
+	public static List<Jogo> buscaTime(Time time) {
+		return genDAO.customRule((em) -> {
+			Query consultaBuscaTodos = em.createNamedQuery("buscaTime", Jogo.class);
+			consultaBuscaTodos.setParameter("time", time);
+			return consultaBuscaTodos.getResultList();
 		});
 	}
 

@@ -52,9 +52,10 @@
 						<a href="cadastro_campeonato.xhtml"
 							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cadastro
 							campeonato</a> <a href="listagem.xhtml"
+							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-mediu">Listagem
+							jogos</a> <a href="filtro.xhtml"
 							class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-							aria-current="page">Listagem jogos</a> <a href="filtro.xhtml"
-							class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Filtro</a>
+							aria-current="page">Filtro</a>
 					</div>
 				</div>
 			</div>
@@ -67,29 +68,39 @@
 			<p:dataTable id="jogosDataTable" var="jogo" value="#{jogoBean.jogos}"
 				rowKey="#{jogo.id}" selection="#{jogoBean.jogoSelecionado}"
 				selectionMode="single" class="overflow-x-hidden" scrollable="true"
-				scrollHeight="50%"
-				globalFilterFunction="#{jogoBean.globalFilterFunction}"
-				widgetVar="filtroVar" filteredValue="#{jogoBean.jogosFiltrados}">
+				scrollHeight="50%">
 				<f:facet name="header">
 					Jogos
 					<div class="flex flex-row gap-5 justify-end items-center">
-						<!-- <div class="field">
+						<div class="field">
 							<div>
 								<div class="relative mt-2 rounded-md shadow-sm">
-									<div
-										class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-										<span class="text-gray-500 sm:text-sm"><i
-											class="pi pi-search" /></span>
-									</div>
-									<h:inputText id="globalFilter"
-										onkeyup="PF('filtroVar').filter();" placeholder="Buscar"
-										styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-									</h:inputText>
-
+									<p:selectOneMenu id="time" value="#{jogoBean.timeFiltro}"
+										styleClass="block w-[80px] rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+										<p:ajax listener="#{jogoBean.filtrarJogos}" update="form" />
+										<f:selectItem itemLabel="todos" itemValue="todos" />
+										<f:selectItems value="#{jogoBean.times}" />
+									</p:selectOneMenu>
 								</div>
 							</div>
 						</div>
- -->
+						<!--
+							<div class="field">
+								<div>
+									<div class="relative mt-2 rounded-md shadow-sm">
+										<div
+											class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+											<span class="text-gray-500 sm:text-sm"><i class="pi pi-search" /></span>
+										</div>
+										<h:inputText id="globalFilter" onkeyup="PF('jogosDataTable').filter();"
+											placeholder="Buscar"
+											styleClass="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+										</h:inputText>
+
+									</div>
+								</div>
+							</div>
+					 -->
 						<p:commandButton id="resultados"
 							oncomplete="PF('resultadoDialog').show()" value="Resultados"
 							styleClass="ml-0" update="form mensagens" />
@@ -155,32 +166,32 @@
 				dynamic="true" appendToBody="true"
 				styleClass="field col-12 md:col-4" closeOnEscape="true"
 				closable="true" width="740" height="340">
-				<p:dataTable id="resultadosDataTable" var="resultado"
-					value="#{jogoBean.resultados}" rowKey="#{resultado.time}"
+				<p:dataTable id="resultadosDataTable" var="time"
+					value="#{jogoBean.resultados}" rowKey="#{time.time}"
 					class="overflow-x-hidden" scrollable="true" size="small">
 					<p:column headerText="Time">
-						<h:outputText value="#{resultado.time}" />
+						<h:outputText value="#{time.time}" />
 					</p:column>
 					<p:column headerText="Vitorias">
-						<h:outputText value="#{resultado.vitorias}" />
+						<h:outputText value="#{time.vitorias}" />
 					</p:column>
 					<p:column headerText="Empates">
-						<h:outputText value="#{resultado.empates}" />
+						<h:outputText value="#{time.empates}" />
 					</p:column>
 					<p:column headerText="Derrotas">
-						<h:outputText value="#{resultado.derrotas}" />
+						<h:outputText value="#{time.derrotas}" />
 					</p:column>
 					<p:column headerText="Gols feitos">
-						<h:outputText value="#{resultado.golsFeitos}" />
+						<h:outputText value="#{time.golsFeitos}" />
 					</p:column>
 					<p:column headerText="Gols sofridos">
-						<h:outputText value="#{resultado.golsSofridos}" />
+						<h:outputText value="#{time.golsSofridos}" />
 					</p:column>
 					<p:column headerText="Saldo de gols">
-						<h:outputText value="#{resultado.saldoDeGols}" />
+						<h:outputText value="#{time.saldoDeGols}" />
 					</p:column>
 					<p:column headerText="Pontuação">
-						<h:outputText value="#{resultado.pontuacao}" />
+						<h:outputText value="#{time.pontuacao}" />
 					</p:column>
 				</p:dataTable>
 			</p:dialog>
